@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Edit Risk' if risk else 'New Risk' }}{% endblock %}
+
+{% block content %}
+<h2>{{ 'Edit Risk' if risk else 'New Risk' }}</h2>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('update_risk', id=risk.id) if risk else url_for('create_risk') }}">
+            <div class="mb-3">
+                <label for="risk_name" class="form-label">Risk Name</label>
+                <input type="text" class="form-control" id="risk_name" name="risk_name" value="{{ risk.risk_name if risk else '' }}" required>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="asset_id" class="form-label">Asset</label>
+                    <select class="form-select" id="asset_id" name="asset_id" required>
+                        <option value="">Select Asset...</option>
+                        {% for a in assets %}
+                        <option value="{{ a.id }}" {% if risk and risk.asset_id == a.id %}selected{% endif %}>{{ a.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="threat_id" class="form-label">Threat</label>
+                    <select class="form-select" id="threat_id" name="threat_id" required>
+                        <option value="">Select Threat...</option>
+                        {% for t in threats %}
+                        <option value="{{ t.id }}" {% if risk and risk.threat_id == t.id %}selected{% endif %}>{{ t.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="vulnerability_id" class="form-label">Vulnerability</label>
+                    <select class="form-select" id="vulnerability_id" name="vulnerability_id" required>
+                        <option value="">Select Vulnerability...</option>
+                        {% for v in vulnerabilities %}
+                        <option value="{{ v.id }}" {% if risk and risk.vulnerability_id == v.id %}selected{% endif %}>{{ v.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="likelihood" class="form-label">Likelihood (1-5)</label>
+                    <input type="number" class="form-control" id="likelihood" name="likelihood" min="1" max="5" value="{{ risk.likelihood if risk else 1 }}" required onchange="updateScore()">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="impact" class="form-label">Impact (1-5)</label>
+                    <input type="number" class="form-control" id="impact" name="impact" min="1" max="5" value="{{ risk.impact if risk else 1 }}" required onchange="updateScore()">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Computed Score Preview</label>
+                    <div id="score_preview" class="form-control bg-light">1 (Low)</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="owner" class="form-label">Owner</label>
+                    <input type="text" class="form-control" id="owner" name="owner" value="{{ risk.owner if risk else '' }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="Open" {% if risk and risk.status == 'Open' %}selected{% endif %}>Open</option>
+                        <option value="Mitigating" {% if risk and risk.status == 'Mitigating' %}selected{% endif %}>Mitigating</option>
+                        <option value="Accepted" {% if risk and risk.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                        <option value="Closed" {% if risk and risk.status == 'Closed' %}selected{% endif %}>Closed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="mitigation" class="form-label">Mitigation Plan</label>
+                <textarea class="form-control" id="mitigation" name="mitigation" rows="3">{{ risk.mitigation if risk else '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Risk</button>
+            <a href="{{ url_for('risks') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function updateScore() {
+    var l = parseInt(document.getElementById('likelihood').value) || 0;
+    var i = parseInt(document.getElementById('impact').value) || 0;
+    var score = l * i;
+    var level = 'Low';
+    if(score >= 20) level = 'Critical';
+    else if(score >= 12) level = 'High';
+    else if(score >= 5) level = 'Medium';
+    
+    document.getElementById('score_preview').innerText = score + ' (' + level + ')';
+}
+// Run once on load
+document.addEventListener('DOMContentLoaded', updateScore);
+</script>
+{% endblock %}

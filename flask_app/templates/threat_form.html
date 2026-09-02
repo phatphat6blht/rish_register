@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Edit Threat' if threat else 'New Threat' }}{% endblock %}
+
+{% block content %}
+<h2>{{ 'Edit Threat' if threat else 'New Threat' }}</h2>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('update_threat', id=threat.id) if threat else url_for('create_threat') }}">
+            <div class="mb-3">
+                <label for="name" class="form-label">Threat Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ threat.name if threat else '' }}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <input type="text" class="form-control" id="category" name="category" value="{{ threat.category if threat else '' }}" placeholder="e.g. Malware, Network Attack" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3">{{ threat.description if threat else '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Threat</button>
+            <a href="{{ url_for('threats') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

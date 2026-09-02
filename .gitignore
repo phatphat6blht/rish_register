@@ -1,0 +1,26 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment variables (chứa mật khẩu)
+.env
+
+# Docker volumes
+pg_data/
+mb_data/
+
+# Exported data files (ignore dynamic exports except sample file)
+data/*.csv
+!data/sample_risks.csv
+data/*.xlsx
+
+# IDE
+.vscode/
+.idea/

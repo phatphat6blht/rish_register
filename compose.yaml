@@ -1,0 +1,97 @@
+# ============================================================
+# Risk Register - Docker Compose Configuration
+# Kiến trúc: PostgreSQL + Flask App + Metabase
+# ============================================================
+
+services:
+  # ----------------------------------------------------------
+  # PostgreSQL Database
+  # - Lưu trữ toàn bộ dữ liệu Risk Register
+  # - KHÔNG expose port ra host (bảo mật: network isolation)
+  # - Chỉ flask_app và metabase được truy cập qua internal network
+  # ----------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: risk_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - risk_network
+    # Không có ports: → không expose ra host (security)
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ----------------------------------------------------------
+  # Flask Application
+  # - Ứng dụng web CRUD quản lý Risk Register
+  # - Kết nối tới PostgreSQL để đọc/ghi dữ liệu
+  # - Expose port 5000 cho user truy cập
+  # ----------------------------------------------------------
+  flask_app:
+    build:
+      context: ./flask_app
+      dockerfile: Dockerfile
+    container_name: risk_flask_app
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      FLASK_ENV: ${FLASK_ENV}
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - risk_network
+
+  # ----------------------------------------------------------
+  # Metabase Dashboard
+  # - Công cụ trực quan hóa dữ liệu (BI)
+  # - Kết nối tới PostgreSQL với user READ-ONLY (least privilege)
+  # - Expose port 3000 cho user truy cập dashboard
+  # ----------------------------------------------------------
+  metabase:
+    image: metabase/metabase:v0.50.21
+    container_name: risk_metabase
+    restart: unless-stopped
+    environment:
+      MB_DB_TYPE: h2
+      # Metabase sẽ kết nối tới PostgreSQL thông qua giao diện setup
+      # User metabase_readonly chỉ có quyền SELECT
+    ports:
+      - "3000:3000"
+    volumes:
+      - mb_data:/metabase.db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - risk_network
+
+# ----------------------------------------------------------
+# Volumes - Dữ liệu persistent, không mất khi restart container
+# ----------------------------------------------------------
+volumes:
+  pg_data:
+    name: risk_pg_data
+  mb_data:
+    name: risk_mb_data
+
+# ----------------------------------------------------------
+# Network - Tất cả container giao tiếp qua mạng nội bộ này
+# ----------------------------------------------------------
+networks:
+  risk_network:
+    name: risk_network
+    driver: bridge

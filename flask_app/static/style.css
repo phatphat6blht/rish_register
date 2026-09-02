@@ -1,0 +1,22 @@
+body {
+    background-color: #f8f9fa;
+}
+.risk-critical {
+    background-color: #f8d7da !important;
+    color: #842029;
+}
+.risk-high {
+    background-color: #fd7e14 !important; /* using orange */
+    color: white;
+}
+.risk-medium {
+    background-color: #fff3cd !important;
+    color: #664d03;
+}
+.risk-low {
+    background-color: #d1e7dd !important;
+    color: #0f5132;
+}
+.table td, .table th {
+    vertical-align: middle;
+}

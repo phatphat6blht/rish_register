@@ -1,0 +1,23 @@
+ID,Risk Name,Asset,Threat,Vulnerability,Likelihood,Impact,Risk Score,Risk Level,Owner,Status,Mitigation
+1,Ransomware encrypts Production Database due to unpatched OS,Production Database Server,Ransomware Attack,Unpatched Operating Systems,5,5,25,Critical,CTO,Open,Patch OS and implement EDR
+2,Customer data stolen via SQL injection,Customer Data Storage,SQL Injection Attack,Missing Input Validation,4,5,20,Critical,Security Officer,Open,Implement WAF and fix input validation
+3,CI/CD Pipeline compromised via supply chain,CI/CD Pipeline,Supply Chain Compromise,Outdated Third-Party Libraries,4,5,20,Critical,DevOps Lead,Mitigating,"Update libraries, scan dependencies"
+4,Phishing leads to email system access,Company Email System,Phishing Campaign,No Multi-Factor Authentication,4,4,16,High,IT Manager,Mitigating,Enable MFA and training
+5,Insider steals source code,Source Code Repository,Insider Data Theft,Insufficient Logging and Monitoring,3,5,15,High,CTO,Open,Implement DLP and monitor access
+6,Cloud VPS breached via brute force,Cloud VPS Instances,Brute Force Authentication,Weak Password Policy,4,3,12,High,DevOps Lead,Closed,Enforce strong passwords
+7,Zero-day exploit on Database Server,Production Database Server,Zero-day Exploit,Insufficient Logging and Monitoring,3,5,15,High,Security Officer,Open,Deploy network segmentation
+8,DDoS takes down Customer Data Storage access,Customer Data Storage,DDoS Attack,Insufficient Logging and Monitoring,3,4,12,High,IT Manager,Accepted,Accepting risk for now due to cost
+9,Data deletion on Employee Workstation,Employee Workstations,Accidental Data Deletion,Unencrypted Backup Storage,3,3,9,Medium,IT Manager,Open,Implement regular backups
+10,Physical break-in to Office,Office Physical Access System,Physical Break-in,No Employee Security Training,2,4,8,Medium,Admin Team,Open,Install security cameras
+11,Phone social engineering to reset passwords,Company Email System,Social Engineering via Phone,No Employee Security Training,3,3,9,Medium,HR Manager,Mitigating,Training on verification
+12,Man-in-the-Middle on Internal Wi-Fi,Internal Wi-Fi Network,Man-in-the-Middle Attack,No Network Segmentation,2,3,6,Medium,IT Manager,Open,Segment network
+13,BYOD malware infection,Employee Personal Devices (BYOD),Ransomware Attack,Weak Password Policy,4,2,8,Medium,HR Manager,Closed,Deployed MDM solution
+14,Data exposure on unencrypted backup,Customer Data Storage,Insider Data Theft,Unencrypted Backup Storage,2,5,10,Medium,CTO,Open,Encrypt backups
+15,Excessive API usage leading to partial outage,CI/CD Pipeline,DDoS Attack,No Rate Limiting on APIs,5,2,10,Medium,DevOps Lead,Mitigating,Implement rate limiting
+16,Unnecessary open ports scanned,Cloud VPS Instances,DDoS Attack,Open Unnecessary Ports,3,1,3,Low,DevOps Lead,Accepted,Monitor logs
+17,Accidental deletion of non-critical documents,Employee Workstations,Accidental Data Deletion,No Employee Security Training,2,1,2,Low,HR Manager,Accepted,None
+18,Shoulder surfing at coffee shop,Employee Personal Devices (BYOD),Physical Break-in,No Employee Security Training,2,2,4,Low,HR Manager,Open,Provide privacy screens
+19,Minor phishing attempt on old domain,Company Email System,Phishing Campaign,No Employee Security Training,1,1,1,Low,IT Manager,Closed,Domain blocklisted
+20,Brute force on internal low-privilege system,Internal Wi-Fi Network,Brute Force Authentication,Weak Password Policy,2,1,2,Low,IT Manager,Accepted,Monitor attempts
+21,Physical theft of older laptop,Employee Workstations,Physical Break-in,Missing Data Encryption at Rest,1,3,3,Low,IT Manager,Mitigating,Ensure disk encryption
+22,Low-level API abuse,CI/CD Pipeline,DDoS Attack,No Rate Limiting on APIs,2,2,4,Low,DevOps Lead,Accepted,No action needed currently
