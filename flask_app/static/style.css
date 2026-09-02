@@ -1,22 +1,283 @@
+/* ============================================================
+   SME Risk Register - Cyber Security Dark Theme Design System
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap');
+
+:root {
+    --bg-dark: #090d16;
+    --bg-card: rgba(21, 32, 54, 0.75);
+    --border-card: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(6, 182, 212, 0.4);
+    
+    --accent-cyan: #06b6d4;
+    --accent-indigo: #6366f1;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+
+    /* Risk Badges Colors */
+    --risk-critical-bg: rgba(239, 68, 68, 0.2);
+    --risk-critical-border: #ef4444;
+    --risk-critical-text: #fca5a5;
+
+    --risk-high-bg: rgba(249, 115, 22, 0.2);
+    --risk-high-border: #f97316;
+    --risk-high-text: #fdba74;
+
+    --risk-medium-bg: rgba(245, 158, 11, 0.2);
+    --risk-medium-border: #f59e0b;
+    --risk-medium-text: #fde047;
+
+    --risk-low-bg: rgba(16, 185, 129, 0.2);
+    --risk-low-border: #10b981;
+    --risk-low-text: #6ee7b7;
+}
+
 body {
-    background-color: #f8f9fa;
+    background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #090d16 65%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
 }
-.risk-critical {
-    background-color: #f8d7da !important;
-    color: #842029;
+
+h1, h2, h3, h4, .navbar-brand, .font-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
 }
-.risk-high {
-    background-color: #fd7e14 !important; /* using orange */
-    color: white;
+
+/* Glassmorphism Cards */
+.card, .cyber-card {
+    background: var(--bg-card) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-card) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    color: var(--text-primary);
+    transition: border-color 0.3s ease, transform 0.2s ease;
 }
-.risk-medium {
-    background-color: #fff3cd !important;
-    color: #664d03;
+
+.card:hover {
+    border-color: rgba(99, 102, 241, 0.3) !important;
 }
-.risk-low {
-    background-color: #d1e7dd !important;
-    color: #0f5132;
+
+/* Stat Counter Metric Cards */
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.25rem;
+    border-radius: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    backdrop-filter: blur(12px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.table td, .table th {
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.15);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+/* Navbar Cyber Style */
+.navbar-cyber {
+    background: rgba(15, 23, 42, 0.85) !important;
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navbar-brand {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff !important;
+}
+
+.navbar-brand span {
+    color: var(--accent-cyan);
+}
+
+.nav-link {
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+    border-bottom: 2px solid var(--accent-cyan);
+}
+
+/* Form Controls Dark Styling */
+.form-control, .form-select {
+    background-color: rgba(15, 23, 42, 0.7) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: var(--text-primary) !important;
+    border-radius: 10px !important;
+    padding: 0.6rem 1rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 0 0.25rem rgba(6, 182, 212, 0.2) !important;
+}
+
+.form-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+}
+
+select option {
+    background-color: #0f172a;
+    color: #f1f5f9;
+}
+
+/* Cyber Table Styling */
+.table-cyber {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.table-cyber thead th {
+    background: rgba(15, 23, 42, 0.9) !important;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.table-cyber tbody td {
+    padding: 0.9rem 1rem;
     vertical-align: middle;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.table-cyber tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table-cyber tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Cyber Risk Level Badges */
+.badge-risk {
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    padding: 0.4em 0.8em;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-transform: uppercase;
+}
+
+.risk-critical, td.risk-critical {
+    background-color: var(--risk-critical-bg) !important;
+    color: var(--risk-critical-text) !important;
+    border: 1px solid var(--risk-critical-border);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.2);
+}
+
+.risk-high, td.risk-high {
+    background-color: var(--risk-high-bg) !important;
+    color: var(--risk-high-text) !important;
+    border: 1px solid var(--risk-high-border);
+}
+
+.risk-medium, td.risk-medium {
+    background-color: var(--risk-medium-bg) !important;
+    color: var(--risk-medium-text) !important;
+    border: 1px solid var(--risk-medium-border);
+}
+
+.risk-low, td.risk-low {
+    background-color: var(--risk-low-bg) !important;
+    color: var(--risk-low-text) !important;
+    border: 1px solid var(--risk-low-border);
+}
+
+/* Status Pill Badges */
+.status-pill {
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.status-open { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid #3b82f6; }
+.status-mitigating { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border: 1px solid #a855f7; }
+.status-accepted { background: rgba(107, 114, 128, 0.2); color: #d1d5db; border: 1px solid #6b7280; }
+.status-closed { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid #10b981; }
+
+/* Buttons Glow & Animations */
+.btn-cyber-primary {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.55rem 1.25rem;
+    box-shadow: 0 4px 14px 0 rgba(6, 182, 212, 0.35);
+    transition: all 0.25s ease;
+}
+
+.btn-cyber-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px 0 rgba(6, 182, 212, 0.5);
+    color: #fff;
+}
+
+.btn-cyber-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-cyber-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #090d16;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-cyan);
 }

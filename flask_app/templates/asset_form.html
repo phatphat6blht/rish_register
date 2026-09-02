@@ -1,41 +1,59 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ 'Edit Asset' if asset else 'New Asset' }}{% endblock %}
+{% block title %}{{ 'Edit Asset' if asset else 'New Asset' }} | Cyber Risk Register{% endblock %}
 
 {% block content %}
-<h2>{{ 'Edit Asset' if asset else 'New Asset' }}</h2>
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h2 class="fw-bold mb-0"><i class="bi bi-hdd-network text-info me-2"></i>{{ 'Edit Asset' if asset else 'Add New Asset' }}</h2>
+            <a href="{{ url_for('assets') }}" class="btn btn-cyber-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i> Back</a>
+        </div>
 
-<div class="card mt-4">
-    <div class="card-body">
-        <form method="POST" action="{{ url_for('update_asset', id=asset.id) if asset else url_for('create_asset') }}">
-            <div class="mb-3">
-                <label for="name" class="form-label">Asset Name</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ asset.name if asset else '' }}" required>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="asset_type" class="form-label">Asset Type</label>
-                    <input type="text" class="form-control" id="asset_type" name="asset_type" value="{{ asset.asset_type if asset else '' }}" placeholder="e.g. Server, Application" required>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="owner" class="form-label">Owner</label>
-                    <input type="text" class="form-control" id="owner" name="owner" value="{{ asset.owner if asset else '' }}" required>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="criticality" class="form-label">Criticality (1-5)</label>
-                    <input type="number" class="form-control" id="criticality" name="criticality" min="1" max="5" value="{{ asset.criticality if asset else 1 }}" required>
-                </div>
-            </div>
+        <div class="card p-3 p-md-4">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_asset', id=asset.id) if asset else url_for('create_asset') }}">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Asset Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ asset.name if asset else '' }}" required placeholder="e.g. Production Database Server">
+                    </div>
 
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3">{{ asset.description if asset else '' }}</textarea>
-            </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="asset_type" class="form-label">Asset Type</label>
+                            <select class="form-select" id="asset_type" name="asset_type" required>
+                                <option value="Server" {% if asset and asset.asset_type == 'Server' %}selected{% endif %}>Server</option>
+                                <option value="Application" {% if asset and asset.asset_type == 'Application' %}selected{% endif %}>Application</option>
+                                <option value="Data" {% if asset and asset.asset_type == 'Data' %}selected{% endif %}>Data</option>
+                                <option value="Workstation" {% if asset and asset.asset_type == 'Workstation' %}selected{% endif %}>Workstation</option>
+                                <option value="Network" {% if asset and asset.asset_type == 'Network' %}selected{% endif %}>Network</option>
+                                <option value="People" {% if asset and asset.asset_type == 'People' %}selected{% endif %}>People</option>
+                                <option value="Physical" {% if asset and asset.asset_type == 'Physical' %}selected{% endif %}>Physical</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="criticality" class="form-label">Criticality Level (1 - 5)</label>
+                            <input type="number" class="form-control" id="criticality" name="criticality" min="1" max="5" value="{{ asset.criticality if asset else 3 }}" required>
+                        </div>
+                    </div>
 
-            <button type="submit" class="btn btn-primary">Save Asset</button>
-            <a href="{{ url_for('assets') }}" class="btn btn-secondary">Cancel</a>
-        </form>
+                    <div class="mb-3">
+                        <label for="owner" class="form-label">Owner / Team Responsible</label>
+                        <input type="text" class="form-control" id="owner" name="owner" value="{{ asset.owner if asset else '' }}" required placeholder="e.g. IT Team, DevOps, Security">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Brief details about this asset...">{{ asset.description if asset else '' }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('assets') }}" class="btn btn-cyber-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-cyber-primary px-4"><i class="bi bi-check-circle me-1"></i> Save Asset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

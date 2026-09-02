@@ -1,44 +1,51 @@
 {% extends 'base.html' %}
 
-{% block title %}Threats{% endblock %}
+{% block title %}Threat Register | SME Cyber Risk Register{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Threats</h2>
-    <a href="{{ url_for('new_threat') }}" class="btn btn-primary">Add New Threat</a>
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-virus text-warning me-2"></i>Threat Register</h2>
+        <p class="text-secondary mb-0">Catalog of potential security threat vectors and threat actors</p>
+    </div>
+    <a href="{{ url_for('new_threat') }}" class="btn btn-cyber-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Threat
+    </a>
 </div>
 
-<div class="table-responsive">
-    <table class="table table-bordered table-hover">
-        <thead class="table-light">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for threat in threats %}
-            <tr>
-                <td>{{ threat.id }}</td>
-                <td>{{ threat.name }}</td>
-                <td>{{ threat.category }}</td>
-                <td>{{ threat.description }}</td>
-                <td>
-                    <a href="{{ url_for('edit_threat', id=threat.id) }}" class="btn btn-sm btn-primary">Edit</a>
-                    <form action="{{ url_for('delete_threat', id=threat.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this threat? (Will also delete associated risks)');">
-                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="5" class="text-center">No threats found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-cyber mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">ID</th>
+                    <th>Threat Name</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for threat in threats %}
+                <tr>
+                    <td class="fw-bold text-secondary">#{{ threat.id }}</td>
+                    <td class="fw-semibold text-white">{{ threat.name }}</td>
+                    <td><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-20 px-2 py-1">{{ threat.category }}</span></td>
+                    <td><span class="text-secondary small">{{ threat.description or '-' }}</span></td>
+                    <td class="text-end">
+                        <div class="d-flex justify-content-end gap-1">
+                            <a href="{{ url_for('edit_threat', id=threat.id) }}" class="btn btn-sm btn-outline-info border-0"><i class="bi bi-pencil-square"></i></a>
+                            <form action="{{ url_for('delete_threat', id=threat.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this threat?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash3"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center py-4 text-secondary">No threats found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

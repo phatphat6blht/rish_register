@@ -1,87 +1,104 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ 'Edit Risk' if risk else 'New Risk' }}{% endblock %}
+{% block title %}{{ 'Edit Risk' if risk else 'New Risk' }} | Cyber Risk Register{% endblock %}
 
 {% block content %}
-<h2>{{ 'Edit Risk' if risk else 'New Risk' }}</h2>
+<div class="row justify-content-center">
+    <div class="col-lg-9 col-xl-8">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h2 class="fw-bold mb-0">
+                <i class="bi bi-shield-plus text-cyan me-2"></i>{{ 'Edit Risk' if risk else 'Create New Risk' }}
+            </h2>
+            <a href="{{ url_for('risks') }}" class="btn btn-cyber-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
 
-<div class="card mt-4">
-    <div class="card-body">
-        <form method="POST" action="{{ url_for('update_risk', id=risk.id) if risk else url_for('create_risk') }}">
-            <div class="mb-3">
-                <label for="risk_name" class="form-label">Risk Name</label>
-                <input type="text" class="form-control" id="risk_name" name="risk_name" value="{{ risk.risk_name if risk else '' }}" required>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="asset_id" class="form-label">Asset</label>
-                    <select class="form-select" id="asset_id" name="asset_id" required>
-                        <option value="">Select Asset...</option>
-                        {% for a in assets %}
-                        <option value="{{ a.id }}" {% if risk and risk.asset_id == a.id %}selected{% endif %}>{{ a.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="threat_id" class="form-label">Threat</label>
-                    <select class="form-select" id="threat_id" name="threat_id" required>
-                        <option value="">Select Threat...</option>
-                        {% for t in threats %}
-                        <option value="{{ t.id }}" {% if risk and risk.threat_id == t.id %}selected{% endif %}>{{ t.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="vulnerability_id" class="form-label">Vulnerability</label>
-                    <select class="form-select" id="vulnerability_id" name="vulnerability_id" required>
-                        <option value="">Select Vulnerability...</option>
-                        {% for v in vulnerabilities %}
-                        <option value="{{ v.id }}" {% if risk and risk.vulnerability_id == v.id %}selected{% endif %}>{{ v.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
+        <div class="card p-2 p-md-4">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_risk', id=risk.id) if risk else url_for('create_risk') }}">
+                    <div class="mb-4">
+                        <label for="risk_name" class="form-label">Risk Name / Description</label>
+                        <input type="text" class="form-control" id="risk_name" name="risk_name" value="{{ risk.risk_name if risk else '' }}" placeholder="e.g. Ransomware encrypts Production DB due to unpatched OS" required>
+                    </div>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label for="asset_id" class="form-label"><i class="bi bi-hdd-network me-1 text-info"></i>Asset</label>
+                            <select class="form-select" id="asset_id" name="asset_id" required>
+                                <option value="">Select Asset...</option>
+                                {% for a in assets %}
+                                <option value="{{ a.id }}" {% if risk and risk.asset_id == a.id %}selected{% endif %}>{{ a.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="threat_id" class="form-label"><i class="bi bi-virus me-1 text-warning"></i>Threat</label>
+                            <select class="form-select" id="threat_id" name="threat_id" required>
+                                <option value="">Select Threat...</option>
+                                {% for t in threats %}
+                                <option value="{{ t.id }}" {% if risk and risk.threat_id == t.id %}selected{% endif %}>{{ t.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="vulnerability_id" class="form-label"><i class="bi bi-bug me-1 text-danger"></i>Vulnerability</label>
+                            <select class="form-select" id="vulnerability_id" name="vulnerability_id" required>
+                                <option value="">Select Vulnerability...</option>
+                                {% for v in vulnerabilities %}
+                                <option value="{{ v.id }}" {% if risk and risk.vulnerability_id == v.id %}selected{% endif %}>{{ v.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="likelihood" class="form-label">Likelihood (1-5)</label>
-                    <input type="number" class="form-control" id="likelihood" name="likelihood" min="1" max="5" value="{{ risk.likelihood if risk else 1 }}" required onchange="updateScore()">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="impact" class="form-label">Impact (1-5)</label>
-                    <input type="number" class="form-control" id="impact" name="impact" min="1" max="5" value="{{ risk.impact if risk else 1 }}" required onchange="updateScore()">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Computed Score Preview</label>
-                    <div id="score_preview" class="form-control bg-light">1 (Low)</div>
-                </div>
-            </div>
+                    <div class="p-3 mb-4 rounded-3" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-4">
+                                <label for="likelihood" class="form-label">Likelihood (1 - 5)</label>
+                                <input type="number" class="form-control font-monospace text-center fw-bold" id="likelihood" name="likelihood" min="1" max="5" value="{{ risk.likelihood if risk else 1 }}" required onchange="updateScore()">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="impact" class="form-label">Impact (1 - 5)</label>
+                                <input type="number" class="form-control font-monospace text-center fw-bold" id="impact" name="impact" min="1" max="5" value="{{ risk.impact if risk else 1 }}" required onchange="updateScore()">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Computed Score & Level</label>
+                                <div id="score_preview" class="form-control bg-dark text-cyan text-center font-monospace fw-bold fs-6">1 (Low)</div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="owner" class="form-label">Owner</label>
-                    <input type="text" class="form-control" id="owner" name="owner" value="{{ risk.owner if risk else '' }}" required>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="status" class="form-label">Status</label>
-                    <select class="form-select" id="status" name="status" required>
-                        <option value="Open" {% if risk and risk.status == 'Open' %}selected{% endif %}>Open</option>
-                        <option value="Mitigating" {% if risk and risk.status == 'Mitigating' %}selected{% endif %}>Mitigating</option>
-                        <option value="Accepted" {% if risk and risk.status == 'Accepted' %}selected{% endif %}>Accepted</option>
-                        <option value="Closed" {% if risk and risk.status == 'Closed' %}selected{% endif %}>Closed</option>
-                    </select>
-                </div>
-            </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="owner" class="form-label"><i class="bi bi-person-badge me-1"></i>Risk Owner</label>
+                            <input type="text" class="form-control" id="owner" name="owner" value="{{ risk.owner if risk else '' }}" placeholder="e.g. CTO, Security Officer, IT Lead" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="status" class="form-label"><i class="bi bi-flag me-1"></i>Status</label>
+                            <select class="form-select" id="status" name="status" required>
+                                <option value="Open" {% if risk and risk.status == 'Open' %}selected{% endif %}>Open</option>
+                                <option value="Mitigating" {% if risk and risk.status == 'Mitigating' %}selected{% endif %}>Mitigating</option>
+                                <option value="Accepted" {% if risk and risk.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                                <option value="Closed" {% if risk and risk.status == 'Closed' %}selected{% endif %}>Closed</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <div class="mb-3">
-                <label for="mitigation" class="form-label">Mitigation Plan</label>
-                <textarea class="form-control" id="mitigation" name="mitigation" rows="3">{{ risk.mitigation if risk else '' }}</textarea>
-            </div>
+                    <div class="mb-4">
+                        <label for="mitigation" class="form-label"><i class="bi bi-shield-check me-1 text-success"></i>Mitigation Plan / Action Strategy</label>
+                        <textarea class="form-control" id="mitigation" name="mitigation" rows="3" placeholder="Describe planned or implemented countermeasures...">{{ risk.mitigation if risk else '' }}</textarea>
+                    </div>
 
-            <button type="submit" class="btn btn-primary">Save Risk</button>
-            <a href="{{ url_for('risks') }}" class="btn btn-secondary">Cancel</a>
-        </form>
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a href="{{ url_for('risks') }}" class="btn btn-cyber-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-cyber-primary px-4">
+                            <i class="bi bi-check-circle me-1"></i> Save Risk Record
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -93,13 +110,14 @@ function updateScore() {
     var i = parseInt(document.getElementById('impact').value) || 0;
     var score = l * i;
     var level = 'Low';
-    if(score >= 20) level = 'Critical';
-    else if(score >= 12) level = 'High';
-    else if(score >= 5) level = 'Medium';
+    var badgeClass = 'risk-low';
+    if(score >= 20) { level = 'Critical'; badgeClass = 'risk-critical'; }
+    else if(score >= 12) { level = 'High'; badgeClass = 'risk-high'; }
+    else if(score >= 5) { level = 'Medium'; badgeClass = 'risk-medium'; }
     
-    document.getElementById('score_preview').innerText = score + ' (' + level + ')';
+    var elem = document.getElementById('score_preview');
+    elem.innerText = score + ' (' + level + ')';
 }
-// Run once on load
 document.addEventListener('DOMContentLoaded', updateScore);
 </script>
 {% endblock %}
