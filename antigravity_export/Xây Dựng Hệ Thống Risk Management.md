@@ -476,12 +476,18 @@ Bạn hãy mở trình duyệt và truy cập **`http://localhost:5000`** để 
 
 ## 🧑 User
 Tôi xem thấy trong tệp .gitigore như sau, thì hiện tại tôi đang thấy là có những thư mục liên quan tới data đang bị loại bỏ. Nhưng mà tôi muốn khi tôi đẩy lên github thì bạn tôi chạy luôn mà ko cần phải tải lại hoặc có bản gốc của dữ liệu thì phải làm sao? có cần thiết phải loại bỏ pg_data, mb_data và các tệp csv và xlsx ko? 
- # Docker volumes
-pg_data/
-mb_data/
-
-# Exported data files
-data/*.csv
+ # Docker volumes
+
+pg_data/
+
+mb_data/
+
+
+
+# Exported data files
+
+data/*.csv
+
 data/*.xlsx
 
 Và sao để xem đc giao diện preview của flask 
@@ -768,3 +774,49 @@ Toàn bộ các file nằm gọn gàng trong thư mục dự án và khu vực A
 
 ### 🚀 TRẠNG THÁI HIỆN TẠI:
 Hệ thống đang chạy ngầm 100% hoàn hảo. Bạn chỉ cần mở trình duyệt lên địa chỉ **`http://localhost:5000`**, chụp lại 6 tấm ảnh theo hướng dẫn và dán vào file Word là hoàn thành bài báo cáo xuất sắc!
+
+
+## 🧑 User
+Sao để kết nối metabase tới cơ sở dữ liệu trực tiếp của tôi 
+
+## 🤖 Assistant
+Dưới đây là **Hướng dẫn từng bước chi tiết** để bạn kết nối Metabase (`http://localhost:3000`) trực tiếp vào Cơ sở dữ liệu PostgreSQL đang chạy trong Docker:
+
+---
+
+### 🚀 BƯỚC 1: Truy cập Metabase và tạo Tài khoản Quản trị
+1. Mở trình duyệt web và truy cập địa chỉ:
+   👉 **`http://localhost:3000`**
+2. Bấm nút **"Let's get started"** (hoặc *"Bắt đầu"*).
+3. Nhập thông tin tài khoản Admin tùy ý (Ví dụ: Tên: `Admin`, Email: `admin@sme.com`, Mật khẩu: `Admin123456!`).
+
+---
+
+### 🔌 BƯỚC 2: Điền thông tin kết nối Cơ sở dữ liệu (PostgreSQL)
+
+Tại màn hình **"Add your data"** (Thêm cơ sở dữ liệu của bạn), hãy điền chính xác các thông số sau:
+
+| Tên trường (Field) | Giá trị cần nhập | Giải thích chi tiết |
+|---|---|---|
+| **Database type** | **`PostgreSQL`** | Chọn loại CSDL là PostgreSQL |
+| **Display name** | `Risk Register DB` | Tên gợi nhớ hiển thị trong Metabase |
+| **Host** | **`postgres`** | ⚠️ **QUAN TRỌNG**: Nhập `postgres` (Tên container trong Docker network, **không nhập `localhost`**) |
+| **Port** | **`5432`** | Cổng kết nối nội bộ PostgreSQL |
+| **Database name** | **`risk_db`** | Tên CSDL đã tạo |
+| **Username** | **`metabase_readonly`** | Tài khoản đọc dữ liệu an toàn (**Least Privilege**) |
+| **Password** | **`metabase_ro_pass`** | Mật khẩu tài khoản read-only |
+
+---
+
+### 💡 LƯU Ý BẢO MẬT QUAN TRỌNG (DÙNG ĐỂ GIẢI THÍCH TRONG BÁO CÁO):
+
+> **Tại sao lại điền Host là `postgres` chứ không phải `localhost`?**
+> - Vì Metabase và PostgreSQL đang chạy ở **2 Container riêng biệt** bên trong mạng `risk_network` của Docker.
+> - Đối với container Metabase, `localhost` chính là bản thân container Metabase. Do đó, để gọi sang container PostgreSQL, nó phải dùng **tên của service/container** là **`postgres`**.
+> - Việc sử dụng tài khoản `metabase_readonly` đảm bảo Metabase chỉ có thể đọc dữ liệu vẽ biểu đồ, không bao giờ có thể ghi/xóa làm hư hại dữ liệu gốc.
+
+---
+
+### ✅ BƯỚC 3: Hoàn tất kết nối & Tạo Biểu đồ
+1. Nhấn nút **"Save"** (Lưu). Metabase sẽ kết nối thành công tới PostgreSQL và quét toàn bộ 4 bảng (`assets`, `threats`, `vulnerabilities`, `risks`).
+2. Bây giờ bạn đã có thể bấm **"+ New"** -> **"Question"** -> chọn bảng **`Risks`** để vẽ các biểu đồ phân bố rủi ro (Biểu đồ tròn, biểu đồ cột, danh sách Top 5 rủi ro...) cho bài báo cáo!
