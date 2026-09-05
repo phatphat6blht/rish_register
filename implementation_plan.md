@@ -137,13 +137,13 @@ Trong đó:
 
 ### Ma trận phân loại mức rủi ro (Risk Level)
 
-|  | Impact 1 | Impact 2 | Impact 3 | Impact 4 | Impact 5 |
-|---|---|---|---|---|---|
-| **Likelihood 5** | 5 Med | 10 High | 15 High | 20 Crit | 25 Crit |
-| **Likelihood 4** | 4 Med | 8 Med | 12 High | 16 High | 20 Crit |
-| **Likelihood 3** | 3 Low | 6 Med | 9 Med | 12 High | 15 High |
-| **Likelihood 2** | 2 Low | 4 Med | 6 Med | 8 Med | 10 High |
-| **Likelihood 1** | 1 Low | 2 Low | 3 Low | 4 Med | 5 Med |
+|                  | Impact 1 | Impact 2 | Impact 3 | Impact 4 | Impact 5 |
+|------------------|----------|----------|----------|----------|----------|
+| **Likelihood 5** | 5 Med    | 10 High  | 15 High  | 20 Crit  | 25 Crit  |
+| **Likelihood 4** | 4 Med    | 8 Med    | 12 High  | 16 High  | 20 Crit  |
+| **Likelihood 3** | 3 Low    | 6 Med    | 9 Med    | 12 High  | 15 High  |
+| **Likelihood 2** | 2 Low    | 4 Med    | 6 Med    | 8 Med    | 10 High  |
+| **Likelihood 1** | 1 Low    | 2 Low    | 3 Low    | 4 Med    | 5 Med    |
 
 **Quy tắc phân loại**:
 - **Critical** (Nghiêm trọng): Score ≥ 20
@@ -153,12 +153,12 @@ Trong đó:
 
 ### Trạng thái xử lý rủi ro
 
-| Trạng thái | Ý nghĩa |
-|---|---|
-| **Open** | Mới phát hiện, chưa có hành động |
+| Trạng thái     | Ý nghĩa                             |
+|----------------|-------------------------------------|
+| **Open**       | Mới phát hiện, chưa có hành động    |
 | **Mitigating** | Đang thực hiện biện pháp giảm thiểu |
-| **Accepted** | Chấp nhận rủi ro (cost > benefit) |
-| **Closed** | Đã xử lý xong |
+| **Accepted**   | Chấp nhận rủi ro (cost > benefit)   |
+| **Closed**     | Đã xử lý xong                       |
 
 ---
 
